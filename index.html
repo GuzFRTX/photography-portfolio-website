@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guilherme Ribeiro &mdash; Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0c0b09; --bg2: #080806; --text: #978f86; --muted: #978f86; --accent: #978f86; --border: #978f86; --white: #FDFAF6; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; overflow: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; }
+  .nav-logo, .nav-link { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .nav-logo { font-weight: 500; color: var(--text); }
+  .nav-link { font-weight: 400; color: var(--muted); transition: color 0.2s; }
+  .nav-link:hover { color: var(--text); }
+  .scene { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
+  .hero-text { position: absolute; top: 50%; left: 48px; transform: translateY(-50%); max-width: 420px; z-index: 10; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-title { font-family: 'Bodoni Moda', serif; font-size: clamp(72px, 9vw, 120px); font-weight: 500; line-height: 0.9; letter-spacing: -0.02em; color: var(--text); margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-title em { font-style: italic; font-weight: 400; color: var(--accent); }
+  .hero-desc { font-size: 14px; font-weight: 300; line-height: 1.75; color: var(--muted); margin-bottom: 36px; max-width: 320px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--text); padding-bottom: 4px; transition: gap 0.25s, color 0.2s, border-color 0.2s; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .hero-cta:hover { gap: 18px; color: var(--accent); border-color: var(--accent); }
+  .hero-slider { position: absolute; top: 50%; right: 9%; width: min(42vw, 620px); height: min(74vh, 680px); padding: 58px 0; transform: translateY(-50%); z-index: 5; opacity: 0; overflow: hidden; border-radius: 18px; animation: sliderIn 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .hero-slider::before,
+  .hero-slider::after { content: ""; position: absolute; left: 0; right: 0; height: 82px; pointer-events: none; z-index: 3; }
+  .hero-slider::before { top: 0; background: linear-gradient(180deg, var(--bg) 0%, rgba(12,11,9,0) 100%); }
+  .hero-slider::after { bottom: 0; background: linear-gradient(0deg, var(--bg) 0%, rgba(12,11,9,0) 100%); }
+  .hero-slider-track { height: 100%; display: flex; flex-direction: column; gap: 20px; transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+  .hero-slide { position: relative; flex: 0 0 100%; overflow: hidden; border-radius: 18px; background: var(--bg2); box-shadow: 24px 32px 60px rgba(0,0,0,0.18), 8px 12px 20px rgba(0,0,0,0.1); }
+  .hero-slide img { display: block; width: 100%; height: 118%; object-fit: cover; border-radius: inherit; filter: saturate(0.85) contrast(1.05); opacity: 0.45; transform: translateY(var(--parallax-y, 0)) scale(1.04); transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease; will-change: transform, opacity; }
+  .hero-slide.active img { opacity: 1; }
+  .dot-nav { position: fixed; right: 40px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 10px; z-index: 20; opacity: 0; animation: fadeIn 1s 1.2s forwards; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border); cursor: pointer; transition: background 0.2s, transform 0.2s; }
+  .dot.active { background: var(--accent); transform: scale(1.5); }
+  .hero-actions { position: fixed; bottom: 36px; left: 48px; z-index: 20; display: flex; align-items: center; gap: 18px; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+  .secondary-cta { font-size: 12px; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .secondary-cta:hover { color: var(--text); }
+  .project-count { position: fixed; bottom: 36px; right: 40px; z-index: 20; opacity: 0; animation: fadeIn 1s 1.2s forwards; text-align: right; }
+  .count-num { font-family: 'Bodoni Moda', serif; font-size: 42px; font-weight: 500; line-height: 1; color: var(--border); }
+  .count-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+  .noise { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+  .deco-line { position: fixed; left: 0; top: 0; width: 3px; height: 0; background: var(--accent); animation: lineGrow 1.2s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0.5; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sliderIn { from { opacity: 0; transform: translateY(-44%) translateX(60px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+  @keyframes lineGrow { from { height: 0; opacity: 0; } to { height: 100vh; opacity: 0.5; } }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="deco-line"></div>
+<nav>
+  <a class="nav-logo" href="index.html">Guilherme Ribeiro</a>
+  <a class="nav-link" href="sobre.html">Sobre</a>
+</nav>
+<div class="scene">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Portf&oacute;lio Fotogr&aacute;fico</p>
+    <h1 class="hero-title">Hist&oacute;rias em<br><em>Imagem</em></h1>
+    <p class="hero-desc">Uma apresenta&ccedil;&atilde;o do olhar de Guilherme Ribeiro atrav&eacute;s de coberturas e ensaios organizados como narrativas visuais completas.</p>
+    <a class="hero-cta" href="projetos.html">Ver projetos &nbsp;&rarr;</a>
+  </div>
+  <div class="hero-slider" aria-label="Projetos em destaque">
+    <div class="hero-slider-track" data-home-slider-track>
+      <div class="hero-slide active" data-home-slide>
+        <img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-007_resultado.avif" alt="Registro do projeto Batizado Catarina" fetchpriority="high" decoding="async" />
+      </div>
+      <div class="hero-slide" data-home-slide>
+        <img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__206_resultado.avif" alt="Registro do projeto Chá Revelação" loading="lazy" decoding="async" />
+      </div>
+      <div class="hero-slide" data-home-slide>
+        <img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__116_resultado.avif" alt="Registro do projeto Chá Revelação 2024" loading="lazy" decoding="async" />
+      </div>
+      <div class="hero-slide" data-home-slide>
+        <img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_103_resultado.avif" alt="Registro do projeto Formatura CEFET" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dot-nav">
+  <div class="dot active" data-home-dot="0"></div>
+  <div class="dot" data-home-dot="1"></div>
+  <div class="dot" data-home-dot="2"></div>
+  <div class="dot" data-home-dot="3"></div>
+</div>
+<div class="hero-actions">
+  <a class="secondary-cta" href="contato.html">Contato</a>
+  <a class="secondary-cta" href="orcamento.html">Orçamento</a>
+</div>
+<div class="project-count">
+  <div class="count-num" data-home-count>01</div>
+  <div class="count-label">Pastas</div>
+</div>
+<div class="site-credit" aria-label="Designed &amp; Developed by Gustavo Freitas">
+  <span class="site-credit-short">By Guz</span>
+  <span class="site-credit-full">Designed &amp; Developed by Gustavo Freitas</span>
+</div>
+<script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projetos &mdash; Guilherme Ribeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0c0b09; --bg2: #141210; --bg3: #1b1815; --text: #978f86; --muted: #7f786f; --accent: #b8aa96; --border: rgba(151, 143, 134, 0.28); --white: #fdfaf6; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; background: linear-gradient(to bottom, var(--bg) 60%, transparent); }
+  .nav-logo, .nav-link { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .nav-logo { font-weight: 500; color: var(--text); }
+  .nav-link { font-weight: 400; color: var(--muted); transition: color 0.2s; }
+  .nav-link:hover { color: var(--text); }
+  .page-header { padding: 140px 48px 64px; display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid var(--border); opacity: 0; animation: fadeUp 0.7s 0.05s ease forwards; }
+  .page-title { font-family: 'Bodoni Moda', serif; font-size: clamp(52px, 7vw, 96px); font-weight: 500; line-height: 0.9; letter-spacing: -0.02em; }
+  .page-title em { font-style: italic; color: var(--accent); }
+  .page-meta { text-align: right; }
+  .page-meta-count { font-family: 'Bodoni Moda', serif; font-size: 48px; font-weight: 500; color: var(--accent); line-height: 1; }
+  .page-meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .filters { padding: 32px 48px; display: flex; gap: 8px; border-bottom: 1px solid var(--border); opacity: 0; animation: fadeUp 0.7s 0.15s ease forwards; }
+  .filter-btn { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); background: transparent; border: 1px solid var(--border); border-radius: 100px; padding: 8px 20px; cursor: pointer; transition: all 0.2s; }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0c0b09; }
+  .projects-content { padding: 48px 48px 140px; display: flex; flex-direction: column; gap: 56px; }
+  .project-group { border-top: 1px solid var(--border); padding-top: 24px; opacity: 0; transform: translateY(24px); animation: revealGroup 0.7s ease forwards; }
+  .project-group:nth-child(1) { animation-delay: 0.1s; }
+  .project-group:nth-child(2) { animation-delay: 0.2s; }
+  .project-group:nth-child(3) { animation-delay: 0.3s; }
+  .project-group:nth-child(4) { animation-delay: 0.4s; }
+  .project-group:nth-child(5) { animation-delay: 0.5s; }
+  .group-header { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 28px; align-items: start; margin-bottom: 24px; }
+  .group-kicker { font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .group-title { font-family: 'Bodoni Moda', serif; font-size: clamp(34px, 4vw, 56px); font-weight: 500; line-height: 0.94; }
+  .group-summary { max-width: 540px; font-size: 14px; line-height: 1.75; color: var(--muted); }
+  .group-meta { display: flex; gap: 18px; margin-top: 18px; flex-wrap: wrap; }
+  .group-meta span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .group-gallery { display: grid; grid-template-columns: 1.35fr 1fr 1fr; grid-auto-rows: 240px; gap: 10px; }
+  .gallery-shot { position: relative; overflow: hidden; background: var(--bg2); border: 1px solid rgba(151, 143, 134, 0.12); cursor: zoom-in; }
+  .gallery-shot.wide { grid-row: span 2; }
+  .gallery-shot img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.84) contrast(1.04); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease; }
+  .gallery-shot:hover img { transform: scale(1.03); filter: saturate(1) contrast(1.02); }
+  .video-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .video-card { background: var(--bg2); border: 1px solid rgba(151, 143, 134, 0.16); overflow: hidden; }
+  .video-card video { width: 100%; aspect-ratio: 9 / 16; max-height: 620px; object-fit: cover; display: block; background: #050504; filter: saturate(0.86) contrast(1.04); }
+  .video-card video:fullscreen { width: 100vw; height: 100vh; max-height: none; object-fit: contain; background: #000; filter: none; }
+  .video-card video:-webkit-full-screen { width: 100vw; height: 100vh; max-height: none; object-fit: contain; background: #000; filter: none; }
+  .video-card video:-moz-full-screen { width: 100vw; height: 100vh; max-height: none; object-fit: contain; background: #000; filter: none; }
+  .video-caption { padding: 16px 18px 18px; border-top: 1px solid rgba(151, 143, 134, 0.12); }
+  .video-caption h3 { font-family: 'Bodoni Moda', serif; font-size: 26px; font-weight: 500; line-height: 1; color: var(--white); margin-bottom: 8px; }
+  .video-caption p { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .lightbox { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 32px; background: rgba(6, 6, 5, 0.94); z-index: 200; }
+  .lightbox.is-open { display: flex; }
+  .lightbox-image { max-width: min(1100px, 92vw); max-height: 86vh; width: auto; height: auto; object-fit: contain; box-shadow: 0 24px 70px rgba(0,0,0,0.45); }
+  .lightbox-close { position: absolute; top: 24px; right: 24px; width: 44px; height: 44px; border: 1px solid rgba(253,250,246,0.24); border-radius: 999px; background: rgba(12,11,9,0.72); color: var(--white); font-size: 20px; cursor: pointer; }
+  .lightbox-close:hover { border-color: rgba(253,250,246,0.5); }
+  .deco-line { position: fixed; left: 0; top: 0; width: 3px; height: 100vh; background: var(--accent); opacity: 0.5; }
+  footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to top, rgba(12,11,9,0.96) 70%, transparent); pointer-events: none; }
+  .footer-text { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  @keyframes revealGroup { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 960px) {
+    .group-header { grid-template-columns: 1fr; }
+    .group-gallery { grid-template-columns: 1fr 1fr; }
+    .video-gallery { grid-template-columns: 1fr; }
+    .gallery-shot.wide { grid-column: span 2; grid-row: span 1; height: 360px; }
+  }
+  @media (max-width: 720px) {
+    nav { padding: 22px 24px; }
+    .page-header, .filters, .projects-content, footer { padding-left: 24px; padding-right: 24px; }
+    .page-header { flex-direction: column; align-items: flex-start; gap: 18px; }
+    .filters { flex-wrap: wrap; }
+    .group-gallery { grid-template-columns: 1fr; grid-auto-rows: 220px; }
+    .video-card video { max-height: 540px; }
+    .gallery-shot.wide { grid-column: auto; height: auto; }
+    footer { position: static; flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 32px; pointer-events: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="deco-line"></div>
+<nav>
+  <a class="nav-logo" href="index.html">&larr; Página Inicial</a>
+  <a class="nav-link" href="sobre.html">Sobre</a>
+</nav>
+<header class="page-header">
+  <h1 class="page-title">Projetos realizados.</h1>
+  <div class="page-meta">
+    <div class="page-meta-count">05</div>
+    <div class="page-meta-label">grupos</div>
+  </div>
+</header>
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <button class="filter-btn" data-filter="batizado">Batizados</button>
+  <button class="filter-btn" data-filter="cha">Chás Revelação</button>
+  <button class="filter-btn" data-filter="formatura">Formaturas</button>
+  <button class="filter-btn" data-filter="video">Vídeos</button>
+</div>
+<main class="projects-content">
+  <section class="project-group" data-category="batizado">
+    <div class="group-header">
+      <div>
+        <p class="group-kicker">Pasta 01</p>
+        <h2 class="group-title">Batizado Catarina<br>26-07-25</h2>
+      </div>
+      <div>
+        <p class="group-summary">Registro fotográfico de batizado destacando a pureza, a emoção e os momentos mais especiais dessa celebração única.</p>
+        <div class="group-meta">
+          <span>Batizado</span>
+          <span>rio de janeiro</span>
+        </div>
+      </div>
+    </div>
+    <div class="group-gallery">
+      <figure class="gallery-shot wide"><img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-001_resultado.avif" alt="Batizado Catarina - fotografia principal" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-003_resultado.avif" alt="Batizado Catarina - detalhe 1" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-004_resultado.avif" alt="Batizado Catarina - detalhe 2" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-007_resultado.avif" alt="Batizado Catarina - detalhe 3" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/BATIZADO CATARINA 26-07-25/SANTIDADEEMFOCO-013_resultado.avif" alt="Batizado Catarina - detalhe 4" data-lightbox-image loading="lazy" decoding="async" /></figure>
+    </div>
+  </section>
+
+  <section class="project-group" data-category="cha">
+    <div class="group-header">
+      <div>
+        <p class="group-kicker">Pasta 02</p>
+        <h2 class="group-title">Chá Revelação<br>12-11-23</h2>
+      </div>
+      <div>
+        <p class="group-summary">Cobertura fotográfica de chá revelação voltada para capturar a expectativa e a conexão entre os presentes, destacando cada detalhe e a atmosfera especial da celebração.</p>
+        <div class="group-meta">
+          <span>Chá Revelação</span>
+          <span>Rio de janeiro</span>
+        </div>
+      </div>
+    </div>
+    <div class="group-gallery">
+      <figure class="gallery-shot wide"><img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__206_resultado.avif" alt="Chá Revelação - fotografia principal" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__224_resultado.avif" alt="Chá Revelação - detalhe 1" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__231_resultado.avif" alt="Chá Revelação - detalhe 2" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__235_resultado.avif" alt="Chá Revelação - detalhe 3" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__240_resultado.avif" alt="Chá Revelação - detalhe 4" data-lightbox-image loading="lazy" decoding="async" /></figure>
+    </div>
+  </section>
+
+  <section class="project-group" data-category="formatura">
+    <div class="group-header">
+      <div>
+        <p class="group-kicker">Pasta 03</p>
+        <h2 class="group-title">Formatura CEFET<br>Turma Mecânica 2025</h2>
+      </div>
+      <div>
+        <p class="group-summary">Cobertura fotográfica de formatura capturando a emoção de um ciclo que se encerra e outro que se inicia, valorizando cada detalhe e cada conquista ao longo da celebração.</p>
+        <div class="group-meta">
+          <span>formatura</span>
+          <span>rio de janeiro</span>
+        </div>
+      </div>
+    </div>
+    <div class="group-gallery">
+      <figure class="gallery-shot wide"><img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_326_resultado.avif" alt="Formatura CEFET - fotografia principal" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_206_resultado.avif" alt="Formatura CEFET - detalhe 1" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_284_resultado.avif" alt="Formatura CEFET - detalhe 2" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_197_resultado.avif" alt="Formatura CEFET - detalhe 3" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/FORMATURA CEFET - TURMA MECANICA 2025/LHERME FILMS_287_resultado.avif" alt="Formatura CEFET - detalhe 4" data-lightbox-image loading="lazy" decoding="async" /></figure>
+    </div>
+  </section>
+
+  <section class="project-group" data-category="cha">
+    <div class="group-header">
+      <div>
+        <p class="group-kicker">Pasta 04</p>
+        <h2 class="group-title">Chá Revelação<br>28-04-24</h2>
+      </div>
+      <div>
+        <p class="group-summary">Registro fotográfico de um chá revelação marcado por momentos espontâneos, sorrisos e a emoção da descoberta, com foco nos detalhes e nas reações que tornam esse momento único.</p>
+        <div class="group-meta">
+          <span>Chá Revelação</span>
+          <span>Rio de janeiro</span>
+        </div>
+      </div>
+    </div>
+    <div class="group-gallery">
+      <figure class="gallery-shot wide"><img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__17_resultado.avif" alt="Chá Revelação 28-04-24 - fotografia principal" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__185_resultado.avif" alt="Chá Revelação 28-04-24 - detalhe 1" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__54_resultado.avif" alt="Chá Revelação 28-04-24 - detalhe 2" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__257_resultado.avif" alt="Chá Revelação 28-04-24 - detalhe 3" data-lightbox-image loading="lazy" decoding="async" /></figure>
+      <figure class="gallery-shot"><img src="images/CHA REVELAÇÃO 28-04-24/@GUILHERME_FOTOGRAFO__23_resultado.avif" alt="Chá Revelação 28-04-24 - detalhe 4" data-lightbox-image loading="lazy" decoding="async" /></figure>
+    </div>
+  </section>
+
+  <section class="project-group" data-category="video">
+    <div class="group-header">
+      <div>
+        <p class="group-kicker">Pasta 05</p>
+        <h2 class="group-title">Filmagens</h2>
+      </div>
+      <div>
+        <p class="group-summary">Coleção de vídeos reunindo diferentes projetos audiovisuais, com foco em narrativa, estética e impacto visual.</p>
+        <div class="group-meta">
+          <span>vídeos</span>
+          <span>Rio de janeiro</span>
+        </div>
+      </div>
+    </div>
+    <div class="video-gallery">
+      <article class="video-card">
+        <video src="videos/ANA BEATRIZ 07-03-26 N3.mp4?v=20260422133127" controls preload="metadata" playsinline></video>
+        <div class="video-caption">
+          <h3>Ana Beatriz</h3>
+          <p>07-03-26</p>
+        </div>
+      </article>
+      <article class="video-card">
+        <video src="videos/COSMOPESSOA 18-03-26.mp4?v=20260422132953" controls preload="metadata" playsinline></video>
+        <div class="video-caption">
+          <h3>Cosmo Pessoa</h3>
+          <p>18-03-26</p>
+        </div>
+      </article>
+      <article class="video-card">
+        <video src="videos/REELS HALLELUYA 2025.mp4?v=20260422132955" controls preload="metadata" playsinline></video>
+        <div class="video-caption">
+          <h3>Festival Halleluya</h3>
+          <p>2025</p>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<p class="filter-empty" hidden>Nenhum grupo encontrado nessa seleção.</p>
+<div class="lightbox" data-lightbox aria-hidden="true">
+  <button class="lightbox-close" type="button" aria-label="Fechar imagem" data-lightbox-close>&times;</button>
+  <img class="lightbox-image" src="" alt="" data-lightbox-target />
+</div>
+<footer>
+  <span class="footer-text">&copy; 2026 Guilherme Ribeiro</span>
+  <div class="site-credit" aria-label="Designed &amp; Developed by Gustavo Freitas">
+    <span class="site-credit-short">By Guz</span>
+    <span class="site-credit-full">Designed &amp; Developed by Gustavo Freitas</span>
+  </div>
+  <span class="footer-text">Rio de Janeiro, BR</span>
+</footer>
+<script src="script.js" defer></script>
+</body>
+</html>

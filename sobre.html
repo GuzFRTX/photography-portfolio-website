@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sobre &mdash; Guilherme Ribeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0c0b09; --bg2: #141210; --text: #978f86; --muted: #7f786f; --accent: #b8aa96; --border: rgba(151, 143, 134, 0.28); --white: #FDFAF6; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; overflow: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; }
+  .nav-logo, .nav-link { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; }
+  .nav-logo { font-weight: 500; color: var(--text); }
+  .nav-logo:hover { color: var(--accent); }
+  .nav-link { color: var(--muted); }
+  .nav-link:hover { color: var(--text); }
+  .split { display: grid; grid-template-columns: 1fr 1fr; height: 100vh; }
+  .split-photo { position: relative; overflow: hidden; background: var(--bg2); display: flex; align-items: center; justify-content: center; padding: 84px 56px; opacity: 0; animation: slideFromLeft 0.9s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .split-photo-frame { position: relative; width: min(100%, 430px); aspect-ratio: 4 / 5; overflow: hidden; border-radius: 18px; box-shadow: 0 28px 60px rgba(0,0,0,0.26); }
+  .split-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.8) contrast(1.05); }
+  .photo-tag { position: absolute; bottom: 24px; left: 24px; background: rgba(12,11,9,0.38); backdrop-filter: blur(12px); border: 1px solid rgba(253,250,246,0.16); border-radius: 4px; padding: 14px 20px; opacity: 0; animation: fadeUp 0.7s 0.8s ease forwards; }
+  .photo-tag-name { font-family: 'Bodoni Moda', serif; font-size: 18px; font-weight: 500; color: var(--white); line-height: 1.1; }
+  .photo-tag-role { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(253,250,246,0.6); margin-top: 5px; }
+  .split-text { display: flex; flex-direction: column; justify-content: center; padding: 100px 64px 80px 56px; overflow-y: auto; opacity: 0; animation: slideFromRight 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .about-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .about-title { font-family: 'Bodoni Moda', serif; font-size: clamp(38px, 4vw, 58px); font-weight: 500; line-height: 1; letter-spacing: -0.02em; margin-bottom: 36px; }
+  .about-title em { font-style: italic; color: var(--accent); }
+  .about-divider { width: 40px; height: 1px; background: var(--accent); margin-bottom: 36px; opacity: 0.6; }
+  .about-bio { font-size: 15px; font-weight: 300; line-height: 1.85; color: var(--muted); max-width: 440px; }
+  .about-bio p + p { margin-top: 20px; }
+  .about-stats { display: flex; gap: 40px; margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border); }
+  .stat-num { font-family: 'Bodoni Moda', serif; font-size: 40px; font-weight: 500; line-height: 1; color: var(--accent); }
+  .stat-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .about-cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 44px; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--text); padding-bottom: 4px; transition: gap 0.25s, color 0.2s, border-color 0.2s; align-self: flex-start; }
+  .about-cta:hover { gap: 18px; color: var(--accent); border-color: var(--accent); }
+  .deco-line { position: fixed; left: 0; top: 0; width: 3px; height: 100vh; background: var(--accent); opacity: 0.5; }
+  @keyframes slideFromLeft { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideFromRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="deco-line"></div>
+<nav>
+  <a class="nav-logo" href="index.html">&larr; Página Inicial</a>
+</nav>
+<div class="split">
+  <div class="split-photo">
+    <div class="split-photo-frame">
+      <img src="lherme/FOTO_LHERME.jpeg" alt="Registro autoral presente no portfólio de Guilherme Ribeiro" decoding="async" />
+      <div class="photo-tag">
+        <div class="photo-tag-name">Guilherme Ribeiro</div>
+        <div class="photo-tag-role">Fotografia &middot; V&iacute;deo &middot; Arte</div>
+      </div>
+    </div>
+  </div>
+  <div class="split-text">
+    <p class="about-eyebrow">Sobre</p>
+    <h1 class="about-title">Uma vis&atilde;o<br><em>constru&iacute;da</em><br>com o tempo.</h1>
+    <div class="about-divider"></div>
+    <div class="about-bio">
+      <p>Guilherme Ribeiro iniciou na fotografia ainda na escola, quando descobriu sua paix&atilde;o por registrar momentos e contar hist&oacute;rias atrav&eacute;s das imagens. Com o tempo, desenvolveu um olhar sens&iacute;vel, atento aos detalhes e &agrave;s emo&ccedil;&otilde;es que transformam cada registro em algo &uacute;nico.</p>
+      <p>Seu trabalho busca ir al&eacute;m do simples clique, captando gestos, atmosferas e instantes que carregam significado. Cada projeto &eacute; uma oportunidade de construir uma narrativa visual aut&ecirc;ntica.</p>
+      <p>Baseado no Rio de Janeiro, Guilherme segue em constante evolu&ccedil;&atilde;o, aprimorando seu olhar a cada novo trabalho e transformando experi&ecirc;ncias em mem&oacute;rias duradouras.</p>
+    </div>
+    <div class="about-stats">
+      <div><div class="stat-num">+100</div><div class="stat-label">Trabalhos</div></div>
+      <div><div class="stat-num">07</div><div class="stat-label">Anos de carreira</div></div>
+    </div>
+    <a class="about-cta" href="projetos.html">Ver projetos &rarr;</a>
+  </div>
+</div>
+<div class="site-credit" aria-label="Designed &amp; Developed by Gustavo Freitas">
+  <span class="site-credit-short">By Guz</span>
+  <span class="site-credit-full">Designed &amp; Developed by Gustavo Freitas</span>
+</div>
+</body>
+</html>

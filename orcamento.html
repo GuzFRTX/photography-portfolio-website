@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Orçamento &mdash; Guilherme Ribeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0c0b09; --bg2: #141210; --text: #978f86; --muted: #7f786f; --accent: #b8aa96; --border: rgba(151, 143, 134, 0.28); --white: #fdfaf6; --surface: rgba(20, 18, 16, 0.74); }
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; }
+  body { overflow-x: hidden; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; background: linear-gradient(to bottom, var(--bg) 58%, transparent); }
+  .nav-logo, .nav-link { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .nav-logo { font-weight: 500; color: var(--text); }
+  .nav-link { color: var(--muted); transition: color 0.2s; }
+  .nav-logo:hover, .nav-link:hover { color: var(--accent); }
+  .noise { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+  .deco-line { position: fixed; left: 0; top: 0; width: 3px; height: 100vh; background: var(--accent); opacity: 0.5; z-index: 3; }
+  .budget-page { position: relative; z-index: 2; min-height: 100vh; padding: 138px 48px 72px; display: grid; grid-template-columns: minmax(280px, 0.72fr) minmax(560px, 1.28fr); gap: 56px; align-items: center; }
+  .budget-copy { max-width: 470px; opacity: 0; animation: fadeUp 0.75s 0.05s ease forwards; }
+  .budget-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .budget-title { font-family: 'Bodoni Moda', serif; font-size: clamp(54px, 7vw, 94px); font-weight: 500; line-height: 0.92; letter-spacing: -0.02em; margin-bottom: 26px; }
+  .budget-title em { color: var(--accent); font-style: italic; }
+  .budget-desc { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 390px; }
+  .budget-table-wrap { width: 100%; opacity: 0; transform: translateY(16px); animation: fadeUp 0.75s 0.18s ease forwards; }
+  .budget-list { width: min(100%, 680px); display: flex; flex-direction: column; gap: 12px; }
+  .budget-category { border: 1px solid rgba(151, 143, 134, 0.22); border-radius: 18px; background: linear-gradient(145deg, rgba(184,170,150,0.08), rgba(20,18,16,0.92)); overflow: hidden; }
+  .budget-category-button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 18px; padding: 20px 22px; border: 0; background: transparent; color: var(--white); text-align: left; cursor: pointer; }
+  .budget-category-button:hover { background: rgba(253,250,246,0.02); }
+  .budget-category-title { font-family: 'Bodoni Moda', serif; font-size: clamp(28px, 3.2vw, 38px); font-weight: 500; line-height: 0.95; }
+  .budget-category-count { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .budget-category-icon { font-size: 24px; line-height: 1; color: var(--accent); transition: transform 0.3s ease; }
+  .budget-category-button[aria-expanded="true"] .budget-category-icon { transform: rotate(45deg); }
+  .budget-category-meta { grid-column: 1 / -1; font-size: 10px; line-height: 1.7; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .budget-category-panel { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+  .budget-category-panel.is-open { opacity: 1; }
+  .budget-category-table-wrap { padding: 0 14px 14px; }
+  .budget-category-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; table-layout: auto; color: var(--white); }
+  .budget-category-table tbody td { border-top: 1px solid rgba(151, 143, 134, 0.22); border-bottom: 1px solid rgba(151, 143, 134, 0.22); background: var(--surface); color: #d4cec4; font-size: 14px; line-height: 1.25; padding: 14px 16px; text-align: center; }
+  .budget-category-table tbody td:first-child { border-left: 1px solid rgba(151, 143, 134, 0.22); border-radius: 10px 0 0 10px; text-align: left; color: var(--white); font-family: 'Bodoni Moda', serif; font-size: 22px; font-weight: 500; line-height: 1; }
+  .budget-category-table tbody td:first-child small { display: block; margin-top: 8px; font-family: 'Manrope', sans-serif; font-size: 10px; font-weight: 500; line-height: 1.6; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .budget-category-table tbody td:last-child { border-right: 1px solid rgba(151, 143, 134, 0.22); border-radius: 0 10px 10px 0; color: var(--accent); width: 150px; font-family: 'Bodoni Moda', serif; font-size: 24px; font-weight: 500; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 960px) {
+    .budget-page { grid-template-columns: 1fr; gap: 40px; padding: 122px 24px 48px; }
+    nav { padding: 22px 24px; }
+  }
+  @media (max-width: 720px) {
+    .budget-page { align-items: start; gap: 28px; padding-bottom: 40px; }
+    .budget-copy,
+    .budget-desc,
+    .budget-list { max-width: 100%; width: 100%; }
+    .budget-table-wrap { overflow-x: visible; padding-bottom: 0; }
+    .budget-category-button { grid-template-columns: 1fr auto; gap: 12px; padding: 18px; }
+    .budget-category-count, .budget-category-meta { grid-column: 1 / -1; }
+    .budget-category-title { font-size: clamp(24px, 7vw, 32px); }
+    .budget-category-table { min-width: 0; table-layout: fixed; }
+    .budget-category-table tbody td { padding: 12px 12px; vertical-align: middle; }
+    .budget-category-table tbody td:first-child { font-size: 18px; }
+    .budget-category-table tbody td:first-child small { font-size: 9px; letter-spacing: 0.1em; }
+    .budget-category-table tbody td:last-child { width: 92px; font-size: 19px; white-space: nowrap; }
+  }
+
+  @media (max-width: 420px) {
+    .budget-category-button { padding: 16px; }
+    .budget-category-title { font-size: 22px; }
+    .budget-category-table tbody td { padding: 11px 10px; }
+    .budget-category-table tbody td:first-child { font-size: 16px; }
+    .budget-category-table tbody td:last-child { width: 84px; font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="deco-line"></div>
+<nav>
+  <a class="nav-logo" href="index.html">&larr; Página Inicial</a>
+  <a class="nav-link" href="contato.html">Contato</a>
+</nav>
+<main class="budget-page">
+  <section class="budget-copy">
+    <p class="budget-eyebrow">Orçamento</p>
+    <h1 class="budget-title">Tabela de<br><em>serviços</em></h1>
+    <p class="budget-desc">Escolha a categoria que faz sentido para o seu evento e visualize os valores-base de cada formato de cobertura. Se quiser montar algo personalizado, a aba de contato continua sendo o melhor caminho para alinharmos todos os detalhes.</p>
+  </section>
+  <section class="budget-table-wrap" aria-label="Tabela de orçamento por categoria">
+    <div class="budget-list">
+      <article class="budget-category">
+        <button class="budget-category-button" type="button" data-budget-category-toggle aria-expanded="false" aria-controls="budget-category-batizados">
+          <span class="budget-category-title">Batizados</span>
+          <span class="budget-category-count">02 serviços</span>
+          <span class="budget-category-icon" aria-hidden="true">+</span>
+          <span class="budget-category-meta">Cobertura fotográfica e filme cinematográfico para cerimônias, recepção e momentos em família.</span>
+        </button>
+        <div class="budget-category-panel" id="budget-category-batizados" data-budget-category-panel>
+          <div class="budget-category-table-wrap">
+            <table class="budget-category-table">
+              <tbody>
+                <tr>
+                  <td>Cobertura Fotográfica</td>
+                  <td>R$550</td>
+                </tr>
+                <tr>
+                  <td>Filme Cinematográfico</td>
+                  <td>R$850</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+      <article class="budget-category">
+        <button class="budget-category-button" type="button" data-budget-category-toggle aria-expanded="false" aria-controls="budget-category-chas">
+          <span class="budget-category-title">Chás Revelação</span>
+          <span class="budget-category-count">02 serviços</span>
+          <span class="budget-category-icon" aria-hidden="true">+</span>
+          <span class="budget-category-meta">Registros completos da celebração, decoração, reações e atmosfera do evento.</span>
+        </button>
+        <div class="budget-category-panel" id="budget-category-chas" data-budget-category-panel>
+          <div class="budget-category-table-wrap">
+            <table class="budget-category-table">
+              <tbody>
+                <tr>
+                  <td>Cobertura Fotográfica</td>
+                  <td>R$600</td>
+                </tr>
+                <tr>
+                  <td>Filme Cinematográfico</td>
+                  <td>R$900</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+      <article class="budget-category">
+        <button class="budget-category-button" type="button" data-budget-category-toggle aria-expanded="false" aria-controls="budget-category-casamentos">
+          <span class="budget-category-title">Casamentos</span>
+          <span class="budget-category-count">04 serviços</span>
+          <span class="budget-category-icon" aria-hidden="true">+</span>
+          <span class="budget-category-meta">Opções pensadas para diferentes formatos de cobertura, do pré-wedding ao pacote completo do grande dia.</span>
+        </button>
+        <div class="budget-category-panel" id="budget-category-casamentos" data-budget-category-panel>
+          <div class="budget-category-table-wrap">
+            <table class="budget-category-table">
+              <tbody>
+                <tr>
+                  <td>Pré-Wedding<br><small>Cobertura fotográfica + vídeo</small></td>
+                  <td>R$1.250</td>
+                </tr>
+                <tr>
+                  <td>Plano Bronze<br><small>1 fotógrafo, 1 videomaker</small></td>
+                  <td>R$2.500</td>
+                </tr>
+                <tr>
+                  <td>Plano Silver<br><small>2 fotógrafos, 1 videomaker</small></td>
+                  <td>R$3.350</td>
+                </tr>
+                <tr>
+                  <td>Plano Gold<br><small>2 fotógrafos, 2 videomakers</small></td>
+                  <td>R$5.000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+      <article class="budget-category">
+        <button class="budget-category-button" type="button" data-budget-category-toggle aria-expanded="false" aria-controls="budget-category-aniversarios">
+          <span class="budget-category-title">Aniversários</span>
+          <span class="budget-category-count">02 serviços</span>
+          <span class="budget-category-icon" aria-hidden="true">+</span>
+          <span class="budget-category-meta">Coberturas para festas de aniversário com opções mais enxutas ou completas, conforme o ritmo da celebração.</span>
+        </button>
+        <div class="budget-category-panel" id="budget-category-aniversarios" data-budget-category-panel>
+          <div class="budget-category-table-wrap">
+            <table class="budget-category-table">
+              <tbody>
+                <tr>
+                  <td>Celebração Essencial<br><small>Registro dos principais momentos (4h)</small></td>
+                  <td>R$450</td>
+                </tr>
+                <tr>
+                  <td>Celebração Completa<br><small>Cobertura completa da celebração (6h)</small></td>
+                  <td>R$600</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+</main>
+<div class="site-credit" aria-label="Designed &amp; Developed by Gustavo Freitas">
+  <span class="site-credit-short">By Guz</span>
+  <span class="site-credit-full">Designed &amp; Developed by Gustavo Freitas</span>
+</div>
+<script src="script.js" defer></script>
+</body>
+</html>

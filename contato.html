@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contato &mdash; Guilherme Ribeiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0c0b09; --bg2: #141210; --text: #978f86; --muted: #7f786f; --accent: #b8aa96; --border: rgba(151, 143, 134, 0.28); --white: #fdfaf6; }
+  html, body { min-height: 100%; background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 28px 48px; }
+  .nav-logo, .nav-link { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .nav-logo { font-weight: 500; color: var(--text); }
+  .nav-link { color: var(--muted); }
+  .nav-link:hover { color: var(--text); }
+  .deco-line { position: fixed; left: 0; top: 0; width: 3px; height: 100vh; background: var(--accent); opacity: 0.5; }
+  .noise { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; }
+  .contact-layout { min-height: 100vh; display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 48px; padding: 120px 48px 64px; }
+  .contact-copy { max-width: 520px; z-index: 2; }
+  .contact-eyebrow { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .contact-title { font-family: 'Bodoni Moda', serif; font-size: clamp(56px, 7vw, 96px); font-weight: 500; line-height: 0.92; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .contact-title em { color: var(--accent); font-style: italic; }
+  .contact-desc { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 430px; margin-bottom: 34px; }
+  .contact-list { display: flex; flex-direction: column; gap: 18px; }
+  .contact-item { display: flex; flex-direction: column; gap: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .contact-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+  .contact-value { font-size: 16px; color: var(--white); text-decoration: none; }
+  .contact-value:hover { color: var(--accent); }
+  .contact-panel { position: relative; min-height: 520px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at top, rgba(184,170,150,0.08), transparent 58%), linear-gradient(145deg, rgba(184,170,150,0.05), rgba(20,18,16,0.18)); border: 1px solid rgba(184,170,150,0.12); overflow: hidden; padding: 12px; }
+  .contact-showcase { position: relative; width: min(100%, 680px); aspect-ratio: 16 / 9; overflow: hidden; border-radius: 18px; }
+  .contact-showcase::before,
+  .contact-showcase::after { content: ""; position: absolute; top: 0; bottom: 0; width: 28px; pointer-events: none; z-index: 3; }
+  .contact-showcase::before { left: 0; background: linear-gradient(90deg, var(--bg) 0%, rgba(12,11,9,0) 100%); }
+  .contact-showcase::after { right: 0; background: linear-gradient(270deg, var(--bg) 0%, rgba(12,11,9,0) 100%); }
+  .contact-slider-track { height: 100%; display: flex; flex-direction: row; gap: 0; transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+  .contact-slide { position: relative; flex: 0 0 100%; width: 100%; height: 100%; overflow: hidden; border-radius: 18px; background: var(--bg2); box-shadow: 24px 32px 60px rgba(0,0,0,0.18), 8px 12px 20px rgba(0,0,0,0.1); }
+  .contact-slide img { display: block; width: 112%; height: 100%; object-fit: cover; border-radius: inherit; filter: saturate(0.85) contrast(1.05); opacity: 0.42; transform: translateX(var(--contact-parallax-x, 0)) scale(1.03); transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease; will-change: transform, opacity; }
+  .contact-slide.active img { opacity: 1; }
+  .contact-panel-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,6,0.72), rgba(8,8,6,0.08) 45%, rgba(8,8,6,0.36) 100%); pointer-events: none; }
+  .contact-panel-note { position: absolute; left: 28px; bottom: 28px; z-index: 4; max-width: 260px; }
+  .contact-panel-note p { font-size: 11px; line-height: 1.7; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(253,250,246,0.72); }
+  .contact-panel-count { position: absolute; right: 28px; bottom: 28px; z-index: 4; text-align: right; }
+  .contact-panel-count .count-num { font-family: 'Bodoni Moda', serif; font-size: 40px; font-weight: 500; line-height: 1; color: rgba(253,250,246,0.76); }
+  .contact-panel-count .count-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(253,250,246,0.52); margin-top: 4px; }
+  @media (max-width: 860px) {
+    nav { padding: 22px 24px; }
+    .contact-layout { grid-template-columns: 1fr; padding: 112px 24px 40px; }
+    .contact-panel { min-height: 360px; padding: 12px; }
+    .contact-showcase { width: 100%; }
+    .contact-showcase::before,
+    .contact-showcase::after { width: 18px; }
+    .contact-panel-note { left: 20px; bottom: 20px; max-width: 220px; }
+    .contact-panel-count { right: 20px; bottom: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="deco-line"></div>
+<nav>
+  <a class="nav-logo" href="index.html">&larr; Página Inicial</a>
+  <a class="nav-link" href="projetos.html">Projetos</a>
+</nav>
+<main class="contact-layout">
+  <section class="contact-copy">
+    <p class="contact-eyebrow">Contato</p>
+    <h1 class="contact-title">Vamos falar sobre<br><em>o seu projeto</em></h1>
+    <p class="contact-desc">Se você quer orçar uma cobertura, ensaio ou desenvolver uma narrativa visual para o seu evento, este é o melhor ponto de partida para conversarmos.</p>
+    <div class="contact-list">
+      <div class="contact-item">
+        <span class="contact-label">E-mail</span>
+        <a class="contact-value" href="mailto:guiribesil77@gmail.com">guiribesil77@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Instagram</span>
+        <a class="contact-value" href="https://www.instagram.com/lherme_films/" target="_blank" rel="noreferrer">@lherme_films</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">YouTube</span>
+        <a class="contact-value" href="https://www.youtube.com/@lhermefilms" target="_blank" rel="noreferrer">youtube.com/@lhermefilms</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">WhatsApp</span>
+        <a class="contact-value" href="https://wa.me/5521994740673" target="_blank" rel="noreferrer">+55 (21) 99474-0673</a>
+      </div>
+    </div>
+  </section>
+  <aside class="contact-panel">
+    <div class="contact-showcase" aria-label="Seleção de trabalhos em destaque">
+      <div class="contact-slider-track" data-contact-slider-track>
+        <div class="contact-slide active" data-contact-slide>
+          <img src="images/CHÁ REVELAÇÃO 12-11-23/@GUILHERME_FOTOGRAFO__231_resultado.avif" alt="Seleção de trabalhos de Guilherme Ribeiro" fetchpriority="high" decoding="async" />
+        </div>
+      </div>
+    </div>
+    <div class="contact-panel-overlay"></div>
+    <div class="contact-panel-note">
+      <p>Projetos editoriais, eventos, retratos e narrativas visuais construídas com atenção ao detalhe.</p>
+    </div>
+    <div class="contact-panel-count">
+      <div class="count-num" data-contact-count>01</div>
+      <div class="count-label">Destaques</div>
+    </div>
+  </aside>
+</main>
+<div class="site-credit" aria-label="Designed &amp; Developed by Gustavo Freitas">
+  <span class="site-credit-short">By Guz</span>
+  <span class="site-credit-full">Designed &amp; Developed by Gustavo Freitas</span>
+</div>
+<script src="contact-images.js" defer></script>
+<script src="script.js" defer></script>
+</body>
+</html>
